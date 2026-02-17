@@ -202,28 +202,51 @@ public class GridStreamClient {
 
     /**
      * Parses a row from the server's pipe-delimited format
+     * Optimized to use indexOf() instead of split() to reduce allocations
      */
     private GridDataRow parseRow(String line) {
         try {
-            String[] parts = line.split("\\|");
-            if (parts.length >= 12) {
-                int id = Integer.parseInt(parts[0]);
-                String name = parts[1];
-                double price = Double.parseDouble(parts[2]);
-                int quantity = Integer.parseInt(parts[3]);
-                String status = parts[4];
-                String createdTimestamp = parts[5];
-                String modifiedTimestamp = parts[6];
-                double value = Double.parseDouble(parts[7]);
-                double bidPrice = Double.parseDouble(parts[8]);
-                int bidSize = Integer.parseInt(parts[9]);
-                double askPrice = Double.parseDouble(parts[10]);
-                int askSize = Integer.parseInt(parts[11]);
-                
-                return new GridDataRow(id, name, price, quantity, status, 
-                                       createdTimestamp, modifiedTimestamp, value,
-                                       bidPrice, bidSize, askPrice, askSize);
-            }
+            // Find delimiter positions
+            int idx1 = line.indexOf('|');
+            if (idx1 == -1) return null;
+            int idx2 = line.indexOf('|', idx1 + 1);
+            if (idx2 == -1) return null;
+            int idx3 = line.indexOf('|', idx2 + 1);
+            if (idx3 == -1) return null;
+            int idx4 = line.indexOf('|', idx3 + 1);
+            if (idx4 == -1) return null;
+            int idx5 = line.indexOf('|', idx4 + 1);
+            if (idx5 == -1) return null;
+            int idx6 = line.indexOf('|', idx5 + 1);
+            if (idx6 == -1) return null;
+            int idx7 = line.indexOf('|', idx6 + 1);
+            if (idx7 == -1) return null;
+            int idx8 = line.indexOf('|', idx7 + 1);
+            if (idx8 == -1) return null;
+            int idx9 = line.indexOf('|', idx8 + 1);
+            if (idx9 == -1) return null;
+            int idx10 = line.indexOf('|', idx9 + 1);
+            if (idx10 == -1) return null;
+            int idx11 = line.indexOf('|', idx10 + 1);
+            if (idx11 == -1) return null;
+            
+            // Extract fields using substring
+            int id = Integer.parseInt(line.substring(0, idx1));
+            String name = line.substring(idx1 + 1, idx2);
+            double price = Double.parseDouble(line.substring(idx2 + 1, idx3));
+            int quantity = Integer.parseInt(line.substring(idx3 + 1, idx4));
+            String status = line.substring(idx4 + 1, idx5);
+            String createdTimestamp = line.substring(idx5 + 1, idx6);
+            String modifiedTimestamp = line.substring(idx6 + 1, idx7);
+            double value = Double.parseDouble(line.substring(idx7 + 1, idx8));
+            double bidPrice = Double.parseDouble(line.substring(idx8 + 1, idx9));
+            int bidSize = Integer.parseInt(line.substring(idx9 + 1, idx10));
+            double askPrice = Double.parseDouble(line.substring(idx10 + 1, idx11));
+            int askSize = Integer.parseInt(line.substring(idx11 + 1));
+            
+            return new GridDataRow(id, name, price, quantity, status, 
+                                   createdTimestamp, modifiedTimestamp, value,
+                                   bidPrice, bidSize, askPrice, askSize);
         } catch (Exception e) {
             System.err.println("Error parsing row: " + line + " - " + e.getMessage());
         }
@@ -233,17 +256,24 @@ public class GridStreamClient {
     /**
      * Processes an update message from the server
      * Format: UPDATE|rowId|columnName|newValue
+     * Optimized to use indexOf() instead of split() to reduce allocations
      */
     private void processUpdate(String updateLine) {
         try {
-            String[] parts = updateLine.split("\\|");
-            if (parts.length >= 4) {
-                int rowId = Integer.parseInt(parts[1]);
-                String columnName = parts[2];
-                String newValue = parts[3].replace("\\|", "|").replace("\\n", "\n");
-                
-                controller.processCellUpdate(rowId, columnName, newValue);
-            }
+            // Find delimiter positions
+            int idx1 = updateLine.indexOf('|'); // After "UPDATE"
+            if (idx1 == -1) return;
+            int idx2 = updateLine.indexOf('|', idx1 + 1); // After rowId
+            if (idx2 == -1) return;
+            int idx3 = updateLine.indexOf('|', idx2 + 1); // After columnName
+            if (idx3 == -1) return;
+            
+            // Extract fields using substring
+            int rowId = Integer.parseInt(updateLine.substring(idx1 + 1, idx2));
+            String columnName = updateLine.substring(idx2 + 1, idx3);
+            String newValue = updateLine.substring(idx3 + 1).replace("\\\\|", "|").replace("\\\\n", "\n");
+            
+            controller.processCellUpdate(rowId, columnName, newValue);
         } catch (Exception e) {
             System.err.println("Error processing update: " + updateLine + " - " + e.getMessage());
         }

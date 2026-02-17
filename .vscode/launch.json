@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run JavaFX Client",
+      "request": "launch",
+      "mainClass": "org.joolsnet.javafxclient.FXMLClientApp",
+      "projectName": "JavaFXClient",
+      "vmArgs": "--module-path ${env:PATH_TO_FX} --add-modules javafx.controls,javafx.fxml"
+    }
+  ]
+}

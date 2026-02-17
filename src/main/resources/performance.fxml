@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.joolsnet.javafxclient.PerformanceController"
+      spacing="10" style="-fx-padding: 20;">
+    
+    <Label text="Performance Metrics" style="-fx-font-size: 18px; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets bottom="10"/>
+        </VBox.margin>
+    </Label>
+    
+    <!-- Memory Section -->
+    <Label text="Memory" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+    <GridPane hgap="20" vgap="8">
+        <Label text="Heap Used:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label fx:id="heapUsedLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Heap Committed:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label fx:id="heapCommittedLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Heap Max:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="heapMaxLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Heap Usage:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label fx:id="heapUsageLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Non-Heap Used:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <Label fx:id="nonHeapUsedLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" style="-fx-font-family: monospace;"/>
+    </GridPane>
+    
+    <!-- Memory Generations Section -->
+    <Label text="Memory Generations" style="-fx-font-size: 14px; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+    <GridPane hgap="20" vgap="8">
+        <Label text="Eden Space:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label fx:id="edenSpaceLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Survivor Space:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label fx:id="survivorSpaceLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Old Generation:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="oldGenLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Young GC Count:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label fx:id="youngGcCountLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Old GC Count:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <Label fx:id="oldGcCountLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Allocation Rate:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <Label fx:id="allocationRateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="5" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Promotion Rate:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <Label fx:id="promotionRateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="6" style="-fx-font-family: monospace;"/>
+    </GridPane>
+    
+    <!-- Allocation Tracking Section -->
+    <Label text="Top Allocated Types (JFR)" style="-fx-font-size: 14px; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+    <Label fx:id="allocStatsLabel" text="Initializing..." style="-fx-font-family: monospace; -fx-font-size: 11px;" wrapText="true"/>
+    
+    <!-- GC Section -->
+    <Label text="Garbage Collection" style="-fx-font-size: 14px; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+    <GridPane hgap="20" vgap="8">
+        <Label text="Total Collections:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label fx:id="gcCountLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Total GC Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label fx:id="gcTimeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-family: monospace;"/>
+        
+        <Label text="GC Rate:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="gcRateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Avg GC Pause:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label fx:id="avgGcPauseLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-font-family: monospace;"/>
+    </GridPane>
+    
+    <!-- System Section -->
+    <Label text="System" style="-fx-font-size: 14px; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+    <GridPane hgap="20" vgap="8">
+        <Label text="CPU Cores:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label fx:id="cpuCoresLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Thread Count:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label fx:id="threadCountLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-family: monospace;"/>
+        
+        <Label text="Uptime:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="uptimeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-family: monospace;"/>
+    </GridPane>
+    
+    <Label fx:id="lastUpdateLabel" text="Last update: -" style="-fx-font-size: 10px; -fx-text-fill: gray;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+</VBox>

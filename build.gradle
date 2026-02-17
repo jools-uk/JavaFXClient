@@ -1,0 +1,68 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = "21"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+application {
+    mainClass = 'org.joolsnet.javafxclient.FXMLClientApp'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Task to run with Java Flight Recorder profiling
+tasks.register('run-profile') {
+    group = 'application'
+    description = 'Run the application with Java Flight Recorder profiling enabled'
+    
+    // Configure run task before it executes
+    def timestamp = new Date().format('yyyyMMdd-HHmmss')
+    def jfrFile = file("${buildDir}/jfr/profile-${timestamp}.jfr")
+    jfrFile.parentFile.mkdirs()
+    
+    doFirst {
+        println "Starting Flight Recorder profiling..."
+        println "Recording will be saved to: ${jfrFile.absolutePath}"
+        println "Open with: jmc ${jfrFile.absolutePath}"
+        println "Duration: 120 seconds"
+    }
+    
+    // Configure the run task before execution
+    tasks.run.configure {
+        jvmArgs = (jvmArgs ?: []) + [
+            '-XX:StartFlightRecording=duration=120s,filename=' + jfrFile.absolutePath,
+            '-XX:FlightRecorderOptions=stackdepth=256'
+        ]
+    }
+    
+    dependsOn tasks.run
+    
+    doLast {
+        println "Application finished. Check recording at: ${jfrFile.absolutePath}"
+        if (!jfrFile.exists()) {
+            println "WARNING: JFR file was not created. The JVM may not support Flight Recorder."
+        }
+    }
+}
